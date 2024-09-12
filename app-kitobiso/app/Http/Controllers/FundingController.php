@@ -12,7 +12,15 @@ class FundingController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'status' => 'success',
+            'message' => 'Data Funding berhasil diambil',
+            'data' => Funding::all(),
+        ];
+        return response()->json($data);
+
+
+        return Funding::all();
     }
 
     /**
