@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\FundingController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,16 +31,21 @@ Route::get('/donatur', function (Request $request) {
     ]);
 });
 
-// API CRUD Funding
-Route::get('/funding', [FundingController::class, 'index']); // get all data
-Route::post('/funding', [FundingController::class, 'store']); // create new data
-Route::get('/funding/{id}', [FundingController::class, 'show']); // get data by id
-Route::put('/funding/{id}', [FundingController::class, 'update']); // update data by id
-Route::delete('/funding/{id}', [FundingController::class, 'destroy']); // delete data by id
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    // API CRUD Funding
+    Route::get('/funding', [FundingController::class, 'index']); // get all data
+    Route::post('/funding', [FundingController::class, 'store']); // create new data
+    Route::get('/funding/{id}', [FundingController::class, 'show']); // get data by id
+    Route::put('/funding/{id}', [FundingController::class, 'update']); // update data by id
+    Route::delete('/funding/{id}', [FundingController::class, 'destroy']); // delete data by id
 
-// API CRUD Donation
-//Route::get('/donation', [DonationController::class, 'index']); // get all data
-Route::apiResource('donation', controller: DonationController::class); // get all data
+    // API CRUD Donation
+    //Route::get('/donation', [DonationController::class, 'index']); // get all data
+    Route::apiResource('donation', controller: DonationController::class); // get all data
+
+    // API Logout
+    Route::get('/logout', [AuthController::class, 'logout']);
+    });
 
 //buat route menuju url /donatur dengan method get
 //buat response berupa data json seperti berikut
@@ -58,3 +64,7 @@ Route::apiResource('donation', controller: DonationController::class); // get al
         "name": "Rizal",
     }]
 */
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+

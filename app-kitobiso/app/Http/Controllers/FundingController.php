@@ -28,7 +28,13 @@ class FundingController extends Controller
      */
     public function create()
     {
-        //
+        $input = $request->all();
+        User::create($input);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data Funding berhasil ditambahkan',
+            'data' => $input,
+        ]);
     }
 
     /**
@@ -36,7 +42,24 @@ class FundingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'desc' => 'required',
+            'image' => 'required',
+            'progress' => 'required',
+            'duration' => 'required',
+            'collected' => 'required',
+            'target' => 'required',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $funding = Funding::create($validatedData);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data Funding berhasil ditambahkan',
+            'data' => $funding,
+        ]);
     }
 
     /**
